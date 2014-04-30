@@ -4,6 +4,7 @@ COMP 110
 Final Project
 
 FinalWarApp class
+Aces are considered a low card
 */
 
 import java.awt.*;

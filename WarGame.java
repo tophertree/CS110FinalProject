@@ -187,10 +187,8 @@ public class WarGame extends JFrame{
       
    }
    
-   
-   //**************   
-   //ActionListener for flipButton
-   
+
+
    /**
    ActionListener for flipButton
    */
@@ -199,129 +197,127 @@ public class WarGame extends JFrame{
       public void actionPerformed(ActionEvent e){
       
             
-            //take next Card from array of Cards
-            playerOneFlip = player1deck.get(0);
-            playerTwoFlip = player2deck.get(0);
-            
-            player1deck.remove(0);
-            player2deck.remove(0);
-            
-            // set String image to name of file related to card
-            image1 = playerOneFlip.getCardFile();
-            image2 = playerTwoFlip.getCardFile();
-            
-            // set the image for player1
-            player1Card = new ImageIcon(image1);
-            cardOne.setIcon(player1Card);
-            panel.add(cardOne);
-            
-            // set the image for player2
-            player2Card = new ImageIcon(image2);
-            cardTwo.setIcon(player2Card);
-            panel.add(cardTwo);
-            
-            // add the images to the panel
-            panel.add(p1);
-            panel.add(p2);
-                        
-            
-            if(playerOneFlip.getRank() != playerTwoFlip.getRank()){
-               
-               if(oldImage1 == backSide && oldImage2 == backSide){
-                  
-                  if(playerOneFlip.getRank() > playerTwoFlip.getRank()){
+         //take next Card from array of Cards
+         playerOneFlip = player1deck.get(0);
+         playerTwoFlip = player2deck.get(0);
+         
+         player1deck.remove(0);
+         player2deck.remove(0);
+         
+         // set String image to name of file related to card
+         image1 = playerOneFlip.getCardFile();
+         image2 = playerTwoFlip.getCardFile();
+         
+         // set the image for player1
+         player1Card = new ImageIcon(image1);
+         cardOne.setIcon(player1Card);
+         panel.add(cardOne);
+         
+         // set the image for player2
+         player2Card = new ImageIcon(image2);
+         cardTwo.setIcon(player2Card);
+         panel.add(cardTwo);
+         
+         // add the images to the panel
+         panel.add(p1);
+         panel.add(p2);
                      
-                     player1deck.add(warCard1);
-                     player1deck.add(warCard2);
-                     
-                  }
-                  else{
-                     
-                     player2deck.add(warCard1);
-                     player2deck.add(warCard2);
-                     
-                  }
-               }
-               
-               
-               
+         
+         if(playerOneFlip.getRank() != playerTwoFlip.getRank()){
+            
+            if(oldImage1 == backSide && oldImage2 == backSide){
                
                if(playerOneFlip.getRank() > playerTwoFlip.getRank()){
-               
-                  System.out.println("Player 1 gets the pair");
                   
-                  player1deck.add(playerOneFlip);
-                  player1deck.add(playerTwoFlip);
+                  player1deck.add(warCard1);
+                  player1deck.add(warCard2);
                   
                }
-               else if(playerOneFlip.getRank() < playerTwoFlip.getRank()){
-               
-                  System.out.println("Player 2 gets the pair");
+               else{
                   
-                  player2deck.add(playerOneFlip);
-                  player2deck.add(playerTwoFlip);
-
+                  player2deck.add(warCard1);
+                  player2deck.add(warCard2);
+                  
                }
+            }
+            
+            
+            
+            
+            if(playerOneFlip.getRank() > playerTwoFlip.getRank()){
+            
+               System.out.println("Player 1 gets the pair");
+               
+               player1deck.add(playerOneFlip);
+               player1deck.add(playerTwoFlip);
+               
+            }
+            else if(playerOneFlip.getRank() < playerTwoFlip.getRank()){
+            
+               System.out.println("Player 2 gets the pair");
+               
+               player2deck.add(playerOneFlip);
+               player2deck.add(playerTwoFlip);
+
+            }
 
 
-               //add the images to the panel
-               p1.setText("Player 1 card");
+            //add the images to the panel
+            p1.setText("Player 1 card");
+            panel.add(p1);
+            p2.setText("Player 2 card");
+            panel.add(p2);
+            
+         }
+
+         
+         else{
+            
+            
+            if(image1 != backSide && image2 != backSide){
+               
+               warCard1 = playerOneFlip;
+               warCard2 = playerTwoFlip;
+                                 
+               oldImage1 = backSide;
+               oldImage2 = backSide;
+               
+               player1Card = new ImageIcon(oldImage1);
+               cardOne.setIcon(player1Card);
+               panel.add(cardOne);
+               
+               //set the image for player2
+               player2Card = new ImageIcon(oldImage2);
+               cardTwo.setIcon(player2Card);
+               panel.add(cardTwo);
+               
                panel.add(p1);
-               p2.setText("Player 2 card");
                panel.add(p2);
                
             }
-
-            
-            else{
                
-               
-               if(image1 != backSide && image2 != backSide){
-                  
-                  warCard1 = playerOneFlip;
-                  warCard2 = playerTwoFlip;
-                                    
-                  oldImage1 = backSide;
-                  oldImage2 = backSide;
-                  
-                  player1Card = new ImageIcon(oldImage1);
-                  cardOne.setIcon(player1Card);
-                  panel.add(cardOne);
-                  
-                  //set the image for player2
-                  player2Card = new ImageIcon(oldImage2);
-                  cardTwo.setIcon(player2Card);
-                  panel.add(cardTwo);
-                  
-                  panel.add(p1);
-                  panel.add(p2);
-                  
-               }
-                  
-            }
-            
-                  
-            if(playerOneFlip.getRank() == playerTwoFlip.getRank()){
-               
-               System.out.println("IT'S A WAR!");
-
-            }
-            
-            if(player1deck.size() == 0 || player2deck.size() == 0){  
-               
-               if(player1deck.size() == 0){
-                  
-                  System.out.println("Player 2 wins!");
-               }   
-               else if(player2deck.size() == 0){
-                  
-                  System.out.println("Player 1 wins!");
-               }
-               System.exit(0);
-            }  
+         }
          
+               
+         if(playerOneFlip.getRank() == playerTwoFlip.getRank()){
             
-       } 
+            System.out.println("IT'S A WAR!");
+
+         }
+         
+         if(player1deck.size() == 0 || player2deck.size() == 0){  
+            
+            if(player1deck.size() == 0){
+               
+               System.out.println("Player 2 wins!");
+            }   
+            else if(player2deck.size() == 0){
+               
+               System.out.println("Player 1 wins!");
+            }
+            System.exit(0);
+         }     
+      } 
    }
    
       
