@@ -4,8 +4,6 @@ import java.util.Random;
 
 public class DeckBuild{
    
-   final int DECK_SIZE = 52;
-   final int HALF_DECK = 26;   
    private int rank;
    private int suit;
    private String imageFile;
@@ -15,10 +13,15 @@ public class DeckBuild{
    private ArrayList<Card> deckHalfOne = new ArrayList<>();
    private ArrayList<Card> deckHalfTwo = new ArrayList<>();
    
-   private ArrayList<Card> nextRoundDeck1,nextRoundDeck2;
+   private ArrayList<Card> nextDeck1,nextDeck2;
    
    Random rand = new Random();
    
+   
+   /**
+   Constructor
+   
+   */
    public DeckBuild(){
             
 
@@ -92,22 +95,29 @@ public class DeckBuild{
 
       }
    }
-      
    
+   /**
+   returns the ArrayList<Card> deckHalfOne
+   */
    public ArrayList<Card> getDeckOne(){
       
       return deckHalfOne;
    }
    
    
-   
+   /**
+   returns the ArrayList<Card> deckHalfTwo
+   */
    public ArrayList<Card> getDeckTwo(){
       
       return deckHalfTwo;
    }
-   
-   
-   
+
+
+   /**
+   shuffles the objects in an ArrayList<Card> then returns shuffled ArrayList
+   @param deck The ArrayList<Card> that needs to be shuffled
+   */
    public ArrayList<Card> shuffle(ArrayList<Card> deck){
       
       for(int h = 0; h < deck.size();h++){

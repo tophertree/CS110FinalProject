@@ -1,44 +1,40 @@
+/**
+Chris Ogletree
+COMP 110
+Final Project
+
+WarGame class
+*/
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class WarGame extends JFrame{
-
-   private final int WINDOW_HEIGHT = 600;
-   private final int WINDOW_WIDTH = 1000;
    
-   private final int FULL_DECK = 52;
-   
-   private String image1 = "",image2 = "",backSide = "back.jpg";
+   private Random rand = new Random();
+      
+   private String image1 = "",image2 = "",backSide = "ImageFiles\\back.jpg";
+   private String oldImage1,oldImage2;
    
    private final ImageIcon backside = new ImageIcon(backSide);
    private JPanel panel;
-   
-   private ArrayList<Card> player1deck,player2deck;
-   private int numFlips = 0;
-   
-   private Card playerOneFlip,playerTwoFlip;
-   private int player1score = 0, player2score = 0,numWars = 0;
-   
-   private Card oldFlip1,oldFlip2;
-   
-   private Card p1war,p2war,downFlip1,downFlip2;
-   
+
    private DeckBuild deck = new DeckBuild();
+
+   private ArrayList<Card> player1deck = new ArrayList<>(deck.getDeckOne());
+   private ArrayList<Card> player2deck = new ArrayList<>(deck.getDeckTwo());
    
-   private boolean another = false;
+   private Card playerOneFlip,playerTwoFlip;   
+   
+   private Card warCard1,warCard2;
+   
    private boolean war;
-   
-   private ArrayList<Card> nextDeck1 = new ArrayList<>();
-   private ArrayList<Card> nextDeck2 = new ArrayList<>();
-   
-   
-   //**************
-   //create the parts of the GUI (buttons, etc.)
       
-      
+   
    //used for west section of gridlayout
    private JLabel player1 = new JLabel();
    private JLabel back1 = new JLabel();
@@ -55,7 +51,7 @@ public class WarGame extends JFrame{
    private JButton resetButton = new JButton();
    
    
-   //these are for the center of the gridlayout
+   //used for the center of the gridlayout
    private ImageIcon player1Card = new ImageIcon(image1);
    private ImageIcon player2Card = new ImageIcon(image2);
    private JLabel cardOne = new JLabel(),cardTwo = new JLabel();
@@ -65,9 +61,13 @@ public class WarGame extends JFrame{
    //*******************   
    //constructor, sets the look of the actual GUI
    
-   
+   /**
+   Constructor
+   sets look and add panels to GUI
+   */
    public WarGame(){
       
+      //create both half decks from the getDeck method
       player1deck = deck.getDeckOne();
       player2deck = deck.getDeckTwo();
       
@@ -77,7 +77,6 @@ public class WarGame extends JFrame{
       window.setLayout(new BorderLayout());
       
       window.setTitle("Let's play war!");
-      window.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
       
       playerOnePanel();
       window.add(panel,BorderLayout.WEST);
@@ -91,12 +90,16 @@ public class WarGame extends JFrame{
       cardImagePanel();
       window.add(panel,BorderLayout.CENTER);
       
+      window.pack();
       
       window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       window.setVisible(true);
       
    }
    
+   /**
+   panel to set text on buttons and add ActionListeners
+   */
    public void buttonPanel(){
       
       flipButton.setText("Flip next Card");
@@ -124,7 +127,9 @@ public class WarGame extends JFrame{
       panel.add(resetButton,BorderLayout.WEST);
    }
    
-   
+   /**
+   panel to set player one's half of the GUI
+   */
    public void playerOnePanel(){
       
       player1.setText("Player 1");
@@ -139,6 +144,9 @@ public class WarGame extends JFrame{
    }
    
    
+   /**
+   panel to set player two's half of the GUI
+   */
    public void playerTwoPanel(){
       
       player2.setText("Player 2");
@@ -152,11 +160,17 @@ public class WarGame extends JFrame{
       panel.add(player2);
    }
    
+   
+   /**
+   panel used to display the card images
+   */
    public void cardImagePanel(){
       
       panel = new JPanel();
       
       panel.setLayout(new GridLayout(2,2));
+      
+      panel.setPreferredSize(new Dimension(500,500));
       
       cardOne.setIcon(player1Card);
       cardTwo.setIcon(player2Card);
@@ -165,8 +179,8 @@ public class WarGame extends JFrame{
       panel.add(cardTwo);
       
       
-      p1.setText("Player 1 score: " + player1score);
-      p2.setText("Player 2 score: " + player2score);
+      p1.setText("Player 1 card");
+      p2.setText("Player 2 card");
       
       panel.add(p1);
       panel.add(p2);
@@ -177,15 +191,20 @@ public class WarGame extends JFrame{
    //**************   
    //ActionListener for flipButton
    
+   /**
+   ActionListener for flipButton
+   */
    private class FlipButtonListener implements ActionListener{
       
       public void actionPerformed(ActionEvent e){
       
-         try{
             
-             //take next Card from array of Cards
-            playerOneFlip = player1deck.get(numFlips);
-            playerTwoFlip = player2deck.get(numFlips);
+            //take next Card from array of Cards
+            playerOneFlip = player1deck.get(0);
+            playerTwoFlip = player2deck.get(0);
+            
+            player1deck.remove(0);
+            player2deck.remove(0);
             
             // set String image to name of file related to card
             image1 = playerOneFlip.getCardFile();
@@ -204,157 +223,111 @@ public class WarGame extends JFrame{
             // add the images to the panel
             panel.add(p1);
             panel.add(p2);
+                        
             
-            
-            if(war != true){
+            if(playerOneFlip.getRank() != playerTwoFlip.getRank()){
+               
+               if(oldImage1 == backSide && oldImage2 == backSide){
+                  
+                  if(playerOneFlip.getRank() > playerTwoFlip.getRank()){
+                     
+                     player1deck.add(warCard1);
+                     player1deck.add(warCard2);
+                     
+                  }
+                  else{
+                     
+                     player2deck.add(warCard1);
+                     player2deck.add(warCard2);
+                     
+                  }
+               }
+               
+               
+               
                
                if(playerOneFlip.getRank() > playerTwoFlip.getRank()){
                
                   System.out.println("Player 1 gets the pair");
                   
-                  nextDeck1.add(playerOneFlip);
-                  nextDeck1.add(playerTwoFlip);
+                  player1deck.add(playerOneFlip);
+                  player1deck.add(playerTwoFlip);
                   
-                  player1score++;
                }
                else if(playerOneFlip.getRank() < playerTwoFlip.getRank()){
                
                   System.out.println("Player 2 gets the pair");
                   
-                  nextDeck2.add(playerOneFlip);
-                  nextDeck2.add(playerTwoFlip);
+                  player2deck.add(playerOneFlip);
+                  player2deck.add(playerTwoFlip);
 
-                  player2score++;
                }
 
 
                //add the images to the panel
-               p1.setText("Player 1 score: " + player1score);
+               p1.setText("Player 1 card");
                panel.add(p1);
-               p2.setText("Player 2 score: " + player2score);
+               p2.setText("Player 2 card");
                panel.add(p2);
-               
                
             }
 
             
-            else if(war == true){
+            else{
                
-               if(image1 == backSide && image2 == backSide){
+               
+               if(image1 != backSide && image2 != backSide){
                   
-                  if(playerOneFlip.getRank() > playerTwoFlip.getRank()){
-                     
-                     player1score = player1score + 2;
-                     
-                     nextDeck1.add(oldFlip1);
-                     nextDeck1.add(oldFlip2);
-                  }
+                  warCard1 = playerOneFlip;
+                  warCard2 = playerTwoFlip;
+                                    
+                  oldImage1 = backSide;
+                  oldImage2 = backSide;
                   
-                  else if(playerOneFlip.getRank() < playerTwoFlip.getRank()){
-                     
-                     player2score = player2score + 2;
-                     
-                     nextDeck2.add(oldFlip1);
-                     nextDeck2.add(oldFlip2);
-                  }
-                  
-                  
-               }
-               else if(image1 != backSide && image2 != backSide){
-                  
-                  
-                  playerOneFlip = player1deck.get(numFlips);
-                  playerTwoFlip = player2deck.get(numFlips);
-                  
-                  if(playerOneFlip.getRank() > playerTwoFlip.getRank()){
-                        
-                     nextDeck1.add(p1war);
-                     nextDeck1.add(p2war);
-                  }
-                  else if(playerOneFlip.getRank() < playerTwoFlip.getRank()){
-                     
-                     nextDeck2.add(p1war);
-                     nextDeck2.add(p2war);
-                  }
-                  
-                  image1 = backSide;
-                  image2 = backSide;
-                  
-                  player1Card = new ImageIcon(image1);
+                  player1Card = new ImageIcon(oldImage1);
                   cardOne.setIcon(player1Card);
                   panel.add(cardOne);
                   
                   //set the image for player2
-                  player2Card = new ImageIcon(image2);
+                  player2Card = new ImageIcon(oldImage2);
                   cardTwo.setIcon(player2Card);
                   panel.add(cardTwo);
                   
                   panel.add(p1);
                   panel.add(p2);
                   
-                  numFlips++;
-                  
-                  
                }
+                  
             }
             
-            //*******************
-            
-            
-            //set the card from the array into the oldFlip variable
-            oldFlip1 = playerOneFlip;
-            oldFlip2 = playerTwoFlip;
-            
-            war = false;
-            
-            if(oldFlip1.getRank() == oldFlip2.getRank()){
+                  
+            if(playerOneFlip.getRank() == playerTwoFlip.getRank()){
                
                System.out.println("IT'S A WAR!");
-               
-               war = true;
-               p1war = oldFlip1;
-               p1war = oldFlip2;
+
             }
             
-            
-         }
+            if(player1deck.size() == 0 || player2deck.size() == 0){  
                
-        
-         catch(IndexOutOfBoundsException c){
-         
-            if(nextDeck1.size() != 0 && nextDeck2.size() != 0){
-               System.out.println("That's the end of the round!");
-               
-               System.out.println("Player 1 has " + nextDeck1.size() + " cards for next round");
-               System.out.println("Player 2 has " + nextDeck2.size() + " cards for next round");
-               
-               another = true;
-            }
-               
-            else if(nextDeck1.size() == 0 || nextDeck2.size() == 0){  
-            
-            
-               if(nextDeck2.size() == 0){
+               if(player1deck.size() == 0){
+                  
+                  System.out.println("Player 2 wins!");
+               }   
+               else if(player2deck.size() == 0){
+                  
                   System.out.println("Player 1 wins!");
                }
-               else if(nextDeck1.size() == 0){
-                  System.out.println("Player 2 wins!");
-               }
-               
                System.exit(0);
-            }
-            System.exit(0);
-         }
+            }  
          
-         
-         numFlips++;
+            
        } 
    }
    
-   
-   //************
-   //ActionListener for quitButton
-   
+      
+   /**
+   ActionListener for quitButton
+   */
    private class QuitButtonListener implements ActionListener{
       
       public void actionPerformed(ActionEvent e){
@@ -365,34 +338,38 @@ public class WarGame extends JFrame{
       }
    }
    
-   
-   //*************
-   //ActionListener for resetButton
-   
+   /**
+   ActionListener for resetButton
+   */
    private class ResetButtonListener implements ActionListener{
       
       public void actionPerformed(ActionEvent e){
-         
+                  
          deck = new DeckBuild();
          
          player1deck = deck.getDeckOne();
          player2deck = deck.getDeckTwo();
+         
+                  
+         image1 = "";
+         image2 = "";
+         
+         player1Card = new ImageIcon(image1);
+         cardOne.setIcon(player1Card);
+         panel.add(cardOne);
+         
+         player2Card = new ImageIcon(image2);
+         cardTwo.setIcon(player2Card);
+         panel.add(cardTwo);
+         
+         panel.add(p1);
+         panel.add(p2);
+         
+         p1.setText("Player 1 card");
+         panel.add(p1);
+         p2.setText("Player 2 card");
+         panel.add(p2);
       }
    }
    
-   
-   
-   
-   
-   
-   public boolean war(Card card1, Card card2){
-      
-      if(card1.getRank() == card2.getRank()){
-         
-         return true;
-      }
-      else
-         return false;
-         
-   }
 }

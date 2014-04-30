@@ -1,3 +1,12 @@
+/**
+Chris Ogletree
+COMP 110
+Instructor: Jackie Horton
+
+Card class
+*/
+
+
 import java.util.Random;
 
 public class Card implements CardInterface{
@@ -8,6 +17,13 @@ public class Card implements CardInterface{
 
    private String fileRank,fileSuit, fileString;
    
+   
+   /**
+   Constructor
+   @param suitIn The suit of the Card object
+   @param rankIn The rank of the Card object
+   
+   */
    public Card(int suitIn, int rankIn){
       
       suit = suitIn;
@@ -15,18 +31,25 @@ public class Card implements CardInterface{
       
    }
    
-   //returns value of suit
+   /**
+   returns value of suit
+   */
    public int getSuit(){
       
       return suit;
    }
    
-   //returns value of rank
+   /**
+   returns value of rank
+   */
    public int getRank(){
 
       return rank;
    }
    
+   /**
+   returns a String consisting of the rank and suit
+   */
    public String toString(){
       
       String outputString = "";
@@ -100,7 +123,10 @@ public class Card implements CardInterface{
       return outputString;   
    }
    
-   //checks equality of two cards
+   /**
+   compares two Card objects to test for equality
+   @param otherCard Card object to compare
+   */
    public boolean equals(Card otherCard){
       
       if(otherCard.rank == this.rank){
@@ -110,6 +136,10 @@ public class Card implements CardInterface{
          return false;
    }  
    
+   /**
+   compares two Card objects to test if it is smaller
+   @param otherCard Card object to compare
+   */
    public boolean lessThan(Card otherCard){
       
       if(otherCard.rank > this.rank){
@@ -119,6 +149,10 @@ public class Card implements CardInterface{
          return false;
    }
    
+   /**
+   compares two Card objects to test if one is larger
+   @param otherCard Card object to compare
+   */
    public boolean greaterThan(Card otherCard){
       
       if(otherCard.rank < this.rank)
@@ -127,6 +161,10 @@ public class Card implements CardInterface{
          return false;
    }
    
+   
+   /**
+   returns a String in the form of a file name
+   */
    public String getCardFile(){
       
       switch(rank){
@@ -190,7 +228,7 @@ public class Card implements CardInterface{
             break;
       }
       
-      fileString = fileRank + fileSuit + ".jpg";
+      fileString = "ImageFiles//" + fileRank + fileSuit + ".jpg";
       
       return fileString;
       
